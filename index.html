@@ -26,13 +26,18 @@
 
 <body onload="startgame()">
     <script>
+    
+    var square; //player square
+    var squaredimensions = 30;
 
-    //invoke the method start() of the gamearea object
+    //function to invoke the method start() of the gamearea object
     function startgame() {
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
+        square = new rectangle(squaredimensions, squaredimensions, "red", 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
     }
 
+    //variable to hold canvas for the game screen
     var gamearea = {
         canvas : document.createElement("canvas"),  
         start : function() {
@@ -44,6 +49,17 @@
             document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         }
     }
+
+    //function to create rectangles
+    function rectangle(width, height, color, x, y) {
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;    
+    canvascontext = gamearea.context;
+    canvascontext.fillStyle = color;
+    canvascontext.fillRect(this.x, this.y, this.width, this.height);
+}
 
     </script>
 </body>
