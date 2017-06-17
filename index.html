@@ -30,7 +30,9 @@
     var square; //player square
     var squaredimensions = 30;
 
-    //function to invoke the method start() of the gamearea object
+    var fps = 50;
+
+    //function to init gamearea object
     function startgame() {
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
@@ -40,6 +42,7 @@
     //variable to hold canvas for the game screen
     var gamearea = {
         canvas : document.createElement("canvas"),  
+        //function to initialize canvas
         start : function() {
             this.canvas.width = 800;
             this.canvas.height = 600;
@@ -47,19 +50,33 @@
             this.context = this.canvas.getContext("2d");
             //insertBefore() method inserts a node as a child, right before a specified existing child
             document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+            this.interval = setInterval(updateGameArea, 1000/fps); //set fps
+        },
+        //function to clear canvas
+        clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
     }
 
     //function to create rectangles
     function rectangle(width, height, color, x, y) {
-    this.width = width;
-    this.height = height;
-    this.x = x;
-    this.y = y;    
-    canvascontext = gamearea.context;
-    canvascontext.fillStyle = color;
-    canvascontext.fillRect(this.x, this.y, this.width, this.height);
-}
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
+        //function to redraw rectangle
+        this.update = function(){
+            canvascontext = gamearea.context;
+            canvascontext.fillStyle = color;
+            canvascontext.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+
+    //function to redraw game screen
+    function updateGameArea() {
+        gamearea.clear();
+        square.update();
+    }
 
     </script>
 </body>
