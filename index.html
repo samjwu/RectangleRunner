@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+
+    <title>Rectangle Runner</title>
+
+    <meta charset="UTF-8">
+    <meta name="description" content="Endless Runner Game">
+    <meta name="keywords" content="HTML, JavaScript, Rectangle, Endless Runner">
+    <meta name="author" content="Sam Wu">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- //style specifies how canvas element should render in browser -->
+    <!-- https://www.w3schools.com/graphics/canvas_intro.asp -->
+    <style>
+    canvas {
+        border: 10px solid #8f9091;  
+        background-color: #000000;
+    }
+    </style>
+
+</head>
+
+
+<body onload="startgame()">
+    <script>
+
+    //invoke the method start() of the gamearea object
+    function startgame() {
+        //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
+        gamearea.start();
+    }
+
+    var gamearea = {
+        canvas : document.createElement("canvas"),  
+        start : function() {
+            this.canvas.width = 800;
+            this.canvas.height = 600;
+            //getContext() is a built-in HTML object with properties and methods for drawing
+            this.context = this.canvas.getContext("2d");
+            //insertBefore() method inserts a node as a child, right before a specified existing child
+            document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        }
+    }
+
+    </script>
+</body>
+
+
+</html>
