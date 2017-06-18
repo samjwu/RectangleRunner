@@ -31,6 +31,9 @@
     var square; //player square
     var squaredimensions=30;
     var squarecolor="rgba(255, 127, 0, 1)"; //pure chroma orange
+    var squarespeed=2;
+
+    var obstacle;
 
     var fps=50;
 
@@ -59,14 +62,19 @@
             // this.canvas.style.cursor = "none"; //hide the mouse cursor
             //get mouse cursor movement event
             window.addEventListener('mousemove', function (event) {
-            gamearea.x = event.pageX;
-            gamearea.y = event.pageY;
-        })
+                gamearea.x = event.pageX;
+                gamearea.y = event.pageY;
+            })
         },
 
         //function to clear canvas
         clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        },
+
+        //function to clear the 1000/fps millisecond interval
+        stop : function() {
+            clearInterval(this.interval); //clearInterval() method clears a timer set with the setInterval() method.
         }
     }
 
@@ -90,55 +98,81 @@
         this.newpos = function() {
         this.x += this.speedx;
         this.y += this.speedy; 
-        } 
+        },
+
+        //function for collision detection (square and obstacle)
+        this.collision = function(otherobj) {
+            var myleft = this.x;
+            var myright = this.x + (this.width);
+            var mytop = this.y;
+            var mybottom = this.y + (this.height);
+            var otherleft = otherobj.x;
+            var otherright = otherobj.x + (otherobj.width);
+            var othertop = otherobj.y;
+            var otherbottom = otherobj.y + (otherobj.height);
+            var collision = true;
+            if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+                collision = false;
+            }
+            return collision;
+        }
     }
 
     //function to init gamearea object
     function startgame() {
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
+        obstacle = new rectangle(10, 200, "green", 300, 120); 
         square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
-    }
-
-    //function to redraw game screen
-    function updategamearea() {
-        gamearea.clear();
-
-        // ARROW KEYS MOVEMENT
-        stopmove()
-        if (gamearea.keys && gamearea.keys[37]) {moveleft();}
-        if (gamearea.keys && gamearea.keys[39]) {moveright();}
-        if (gamearea.keys && gamearea.keys[38]) {moveup();}
-        if (gamearea.keys && gamearea.keys[40]) {movedown();}
-        square.newpos();
-
-        // // MOUSE CURSOR MOVEMENT
-        // if (gamearea.x && gamearea.y) {
-        //     square.x = gamearea.x;
-        //     square.y = gamearea.y; 
-        // }
-
-        square.update();
     }
 
     //functions to move player square
     function moveup() {
-        square.speedy -= 1; 
+        square.speedy -= squarespeed; 
     }
     function movedown() {
-        square.speedy += 1; 
+        square.speedy += squarespeed;
     }
     function moveleft() {
-        square.speedx -= 1;
+        square.speedx -= squarespeed;
     }
     function moveright() {
-        square.speedx += 1;
+        square.speedx += squarespeed;
     }
 
     //function to stop player square
     function stopmove() {
         square.speedx = 0;
         square.speedy = 0; 
+    }
+
+    //function to redraw game screen
+    function updategamearea() {
+        //end game if collision occurs
+        if (square.collision(obstacle)) {
+            gamearea.stop();
+        }
+        //otherwise continue drawing
+        else {
+            gamearea.clear();
+            obstacle.update();
+
+            // ARROW KEYS MOVEMENT
+            stopmove()
+            if (gamearea.keys && gamearea.keys[37]) {moveleft();}
+            if (gamearea.keys && gamearea.keys[39]) {moveright();}
+            if (gamearea.keys && gamearea.keys[38]) {moveup();}
+            if (gamearea.keys && gamearea.keys[40]) {movedown();}
+            square.newpos();
+
+            // // MOUSE CURSOR MOVEMENT
+            // if (gamearea.x && gamearea.y) {
+            //     square.x = gamearea.x;
+            //     square.y = gamearea.y; 
+            // }
+
+            square.update();
+        }
     }
 
     </script>
