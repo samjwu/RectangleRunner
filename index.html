@@ -30,23 +30,31 @@
     
     var square; //player square
     var squaredimensions=30;
-    var squarecolor="rgba(255, 127, 0, 1)";
+    var squarecolor="rgba(255, 127, 0, 1)"; //pure chroma orange
 
     var fps=50;
 
     //variable to hold canvas for the game screen
     var gamearea = {
-        canvas : document.createElement("canvas"),  
+        canvas : document.createElement("canvas"),
+
         //function to initialize canvas
         start : function() {
             this.canvas.width = 800;
             this.canvas.height = 600;
-            //getContext() is a built-in HTML object with properties and methods for drawing
-            this.context = this.canvas.getContext("2d");
-            //insertBefore() method inserts a node as a child, right before a specified existing child
-            document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-            this.interval = setInterval(updateGameArea, 1000/fps); //set fps
+            this.context = this.canvas.getContext("2d"); //getContext() is a built-in HTML object with properties and methods for drawing
+            document.body.insertBefore(this.canvas, document.body.childNodes[0]); //insertBefore() method inserts a node as a child, right before a specified existing child
+            this.interval = setInterval(updategamearea, 1000/fps); //set fps
+
+            //toggle key property when keys are pressed/released
+            window.addEventListener('keydown', function (e) {
+                gamearea.key = e.keyCode;
+            })
+            window.addEventListener('keyup', function (e) {
+                gamearea.key = false;
+            })
         },
+
         //function to clear canvas
         clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -61,12 +69,14 @@
         this.y = y;
         this.speedx = 0;
         this.speedy = 0;
+
         //function to redraw rectangle
         this.update = function(){
             canvascontext = gamearea.context;
             canvascontext.fillStyle = color;
             canvascontext.fillRect(this.x, this.y, this.width, this.height);
         },
+
         //function to move rectangle using speed
         this.newpos = function() {
         this.x += this.speedx;
@@ -82,8 +92,13 @@
     }
 
     //function to redraw game screen
-    function updateGameArea() {
+    function updategamearea() {
         gamearea.clear();
+        stopmove()
+        if (gamearea.key && gamearea.key == 37) {moveleft();}
+        if (gamearea.key && gamearea.key == 39) {moveright();}
+        if (gamearea.key && gamearea.key == 38) {moveup();}
+        if (gamearea.key && gamearea.key == 40) {movedown();}
         square.newpos();
         square.update();
     }
