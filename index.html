@@ -46,12 +46,14 @@
             document.body.insertBefore(this.canvas, document.body.childNodes[0]); //insertBefore() method inserts a node as a child, right before a specified existing child
             this.interval = setInterval(updategamearea, 1000/fps); //set fps
 
-            //toggle key property when keys are pressed/released
-            window.addEventListener('keydown', function (e) {
-                gamearea.key = e.keyCode;
+            //toggle key array when keys are pressed/released
+            //key codes: https://css-tricks.com/snippets/javascript/javascript-keycodes/ and http://keycode.info/
+            window.addEventListener('keydown', function (event) {
+                gamearea.keys = (gamearea.keys || []);
+                gamearea.keys[event.keyCode] = true;
             })
-            window.addEventListener('keyup', function (e) {
-                gamearea.key = false;
+            window.addEventListener('keyup', function (event) {
+                gamearea.keys[event.keyCode] = false; 
             })
         },
 
@@ -94,11 +96,20 @@
     //function to redraw game screen
     function updategamearea() {
         gamearea.clear();
-        stopmove()
-        if (gamearea.key && gamearea.key == 37) {moveleft();}
-        if (gamearea.key && gamearea.key == 39) {moveright();}
-        if (gamearea.key && gamearea.key == 38) {moveup();}
-        if (gamearea.key && gamearea.key == 40) {movedown();}
+
+        // ARROW KEYS MOVEMENT
+        // stopmove()
+        // if (gamearea.key && gamearea.key == 37) {moveleft();}
+        // if (gamearea.key && gamearea.key == 39) {moveright();}
+        // if (gamearea.key && gamearea.key == 38) {moveup();}
+        // if (gamearea.key && gamearea.key == 40) {movedown();}
+        square.speedx = 0;
+        square.speedy = 0; 
+        if (gamearea.keys && gamearea.keys[37]) {square.speedx = -1; }
+        if (gamearea.keys && gamearea.keys[39]) {square.speedx = 1; }
+        if (gamearea.keys && gamearea.keys[38]) {square.speedy = -1; }
+        if (gamearea.keys && gamearea.keys[40]) {square.speedy = 1; }
+
         square.newpos();
         square.update();
     }
@@ -125,7 +136,7 @@
 
     </script>
 
-    <!-- buttons to move player square -->
+    <!-- BUTTON MOVEMENT to move player square -->
     <div style="text-align:center; width:480px;">
         <button onmousedown="moveup()" onmouseup="stopmove()" ontouchstart="moveup()">UP</button><br><br>
         <button onmousedown="moveleft()" onmouseup="stopmove()" ontouchstart="moveleft()">LEFT</button>
