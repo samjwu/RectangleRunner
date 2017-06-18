@@ -68,9 +68,9 @@
             canvascontext.fillRect(this.x, this.y, this.width, this.height);
         },
         //function to move rectangle using speed
-        this.newPos = function() {
-        this.x += this.speedX;
-        this.y += this.speedY; 
+        this.newpos = function() {
+        this.x += this.speedx;
+        this.y += this.speedy; 
         } 
     }
 
@@ -84,7 +84,7 @@
     //function to redraw game screen
     function updateGameArea() {
         gamearea.clear();
-        square.x += 1;
+        square.newpos();
         square.update();
     }
 
@@ -102,16 +102,20 @@
         square.speedx += 1;
     }
 
-    
+    //function to stop player square
+    function stopmove() {
+        square.speedx = 0;
+        square.speedy = 0; 
+    }
 
     </script>
 
     <!-- buttons to move player square -->
     <div style="text-align:center; width:480px;">
-        <button onclick="moveup()">UP</button><br><br>
-        <button onclick="moveleft()">LEFT</button>
-        <button onclick="moveright()">RIGHT</button><br><br>
-        <button onclick="movedown()">DOWN</button>
+        <button onmousedown="moveup()" onmouseup="stopmove()" ontouchstart="moveup()">UP</button><br><br>
+        <button onmousedown="moveleft()" onmouseup="stopmove()" ontouchstart="moveleft()">LEFT</button>
+        <button onmousedown="moveright()" onmouseup="stopmove()" ontouchstart="moveright()">RIGHT</button><br><br>
+        <button onmousedown="movedown()" onmouseup="stopmove()" ontouchstart="movedown()">DOWN</button>
     </div>
 
 </body>
