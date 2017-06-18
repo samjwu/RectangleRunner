@@ -55,6 +55,13 @@
             window.addEventListener('keyup', function (event) {
                 gamearea.keys[event.keyCode] = false; 
             })
+
+            // this.canvas.style.cursor = "none"; //hide the mouse cursor
+            //get mouse cursor movement event
+            window.addEventListener('mousemove', function (event) {
+            gamearea.x = event.pageX;
+            gamearea.y = event.pageY;
+        })
         },
 
         //function to clear canvas
@@ -98,19 +105,19 @@
         gamearea.clear();
 
         // ARROW KEYS MOVEMENT
-        // stopmove()
-        // if (gamearea.key && gamearea.key == 37) {moveleft();}
-        // if (gamearea.key && gamearea.key == 39) {moveright();}
-        // if (gamearea.key && gamearea.key == 38) {moveup();}
-        // if (gamearea.key && gamearea.key == 40) {movedown();}
-        square.speedx = 0;
-        square.speedy = 0; 
-        if (gamearea.keys && gamearea.keys[37]) {square.speedx = -1; }
-        if (gamearea.keys && gamearea.keys[39]) {square.speedx = 1; }
-        if (gamearea.keys && gamearea.keys[38]) {square.speedy = -1; }
-        if (gamearea.keys && gamearea.keys[40]) {square.speedy = 1; }
-
+        stopmove()
+        if (gamearea.keys && gamearea.keys[37]) {moveleft();}
+        if (gamearea.keys && gamearea.keys[39]) {moveright();}
+        if (gamearea.keys && gamearea.keys[38]) {moveup();}
+        if (gamearea.keys && gamearea.keys[40]) {movedown();}
         square.newpos();
+
+        // // MOUSE CURSOR MOVEMENT
+        // if (gamearea.x && gamearea.y) {
+        //     square.x = gamearea.x;
+        //     square.y = gamearea.y; 
+        // }
+
         square.update();
     }
 
@@ -136,13 +143,13 @@
 
     </script>
 
-    <!-- BUTTON MOVEMENT to move player square -->
+    <!--BUTTON MOVEMENT 
     <div style="text-align:center; width:480px;">
         <button onmousedown="moveup()" onmouseup="stopmove()" ontouchstart="moveup()">UP</button><br><br>
         <button onmousedown="moveleft()" onmouseup="stopmove()" ontouchstart="moveleft()">LEFT</button>
         <button onmousedown="moveright()" onmouseup="stopmove()" ontouchstart="moveright()">RIGHT</button><br><br>
         <button onmousedown="movedown()" onmouseup="stopmove()" ontouchstart="movedown()">DOWN</button>
-    </div>
+    </div>-->
 
 </body>
 
