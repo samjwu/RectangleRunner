@@ -79,18 +79,12 @@
         }
     }
 
-    //function to keep track of frame number
-    function everyinterval(n) {
-        if ((gamearea.framenum / n) % 1 == 0) {return true;}
-        return false;
-    }
-
     //function to create rectangles
     function rectangle(width, height, color, x, y) {
         this.width = width;
         this.height = height;
-        this.x = x;
-        this.y = y;
+        this.x = x; //topleft
+        this.y = y; //topleft
         this.speedx = 0;
         this.speedy = 0;
 
@@ -129,7 +123,6 @@
     function startgame() {
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
-        obstacles = new rectangle(10, 200, "green", 300, 120); 
         square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
     }
 
@@ -153,34 +146,55 @@
         square.speedy = 0; 
     }
 
+    //function to keep track of frame number
+    function everyinterval(n) {
+        if ((gamearea.framenum / n) % 1 == 0) {return true;}
+        return false;
+    }
+
     //function to redraw game screen
     function updategamearea() {
-        //end game if collision occurs
-        if (square.collision(obstacles)) {
-            gamearea.stop();
-        }
-        //otherwise continue drawing
-        else {
-            gamearea.clear();
-            obstacles.x -= 1 ;
-            obstacles.update();
+        var x, y; //topleft coordinates of obstacles
 
-            // // MOUSE CURSOR MOVEMENT
-            // if (gamearea.x && gamearea.y) {
-            //     square.x = gamearea.x;
-            //     square.y = gamearea.y; 
-            // }
-
-            // ARROW KEYS MOVEMENT
-            stopmove()
-            if (gamearea.keys && gamearea.keys[37]) {moveleft();}
-            if (gamearea.keys && gamearea.keys[39]) {moveright();}
-            if (gamearea.keys && gamearea.keys[38]) {moveup();}
-            if (gamearea.keys && gamearea.keys[40]) {movedown();}
-            square.newpos();
-            
-            square.update();
+        //loop through all obstacles; stop if square collides with one of them
+        for (i = 0; i < obstacles.length; i += 1) {
+            if (square.collision(obstacles[i])) {
+                gamearea.stop();
+                return;
+            } 
         }
+
+        gamearea.clear();
+        gamearea.framenum += 1 ;
+
+        //place obstacles every n frames
+        if (gamearea.framenum == 1 || everyinterval(100)) {
+            x = gamearea.canvas.width;
+            y = gamearea.canvas.height - 200
+            obstacles.push(new rectangle(10, 200, "yellow", x, y));
+        }
+
+        //move all obstacles
+        for (i = 0; i < obstacles.length; i += 1) {
+            obstacles[i].x += -1;
+            obstacles[i].update();
+        }
+
+        // // MOUSE CURSOR MOVEMENT
+        // if (gamearea.x && gamearea.y) {
+        //     square.x = gamearea.x;
+        //     square.y = gamearea.y; 
+        // }
+
+        // ARROW KEYS MOVEMENT
+        stopmove()
+        if (gamearea.keys && gamearea.keys[37]) {moveleft();}
+        if (gamearea.keys && gamearea.keys[39]) {moveright();}
+        if (gamearea.keys && gamearea.keys[38]) {moveup();}
+        if (gamearea.keys && gamearea.keys[40]) {movedown();}
+        square.newpos();
+
+        square.update();
     }
 
     </script>
