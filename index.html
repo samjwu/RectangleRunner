@@ -29,13 +29,13 @@
     <script>
     
     var square; //player square
-    var squaredimensions=30;
-    var squarecolor="rgba(255, 127, 0, 1)"; //pure chroma orange
-    var squarespeed=2;
+    var squaredimensions = 30;
+    var squarecolor = "rgba(255, 127, 0, 1)"; //pure chroma orange
+    var squarespeed = 2;
 
-    var obstacle;
+    var obstacles=[];
 
-    var fps=50;
+    var fps = 50;
 
     //variable to hold canvas for the game screen
     var gamearea = {
@@ -47,6 +47,7 @@
             this.canvas.height = 600;
             this.context = this.canvas.getContext("2d"); //getContext() is a built-in HTML object with properties and methods for drawing
             document.body.insertBefore(this.canvas, document.body.childNodes[0]); //insertBefore() method inserts a node as a child, right before a specified existing child
+            this.framenum = 0;
             this.interval = setInterval(updategamearea, 1000/fps); //set fps
 
             //toggle key array when keys are pressed/released
@@ -76,6 +77,12 @@
         stop : function() {
             clearInterval(this.interval); //clearInterval() method clears a timer set with the setInterval() method.
         }
+    }
+
+    //function to keep track of frame number
+    function everyinterval(n) {
+        if ((gamearea.framenum / n) % 1 == 0) {return true;}
+        return false;
     }
 
     //function to create rectangles
@@ -122,7 +129,7 @@
     function startgame() {
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
-        obstacle = new rectangle(10, 200, "green", 300, 120); 
+        obstacles = new rectangle(10, 200, "green", 300, 120); 
         square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
     }
 
@@ -149,13 +156,20 @@
     //function to redraw game screen
     function updategamearea() {
         //end game if collision occurs
-        if (square.collision(obstacle)) {
+        if (square.collision(obstacles)) {
             gamearea.stop();
         }
         //otherwise continue drawing
         else {
             gamearea.clear();
-            obstacle.update();
+            obstacles.x -= 1 ;
+            obstacles.update();
+
+            // // MOUSE CURSOR MOVEMENT
+            // if (gamearea.x && gamearea.y) {
+            //     square.x = gamearea.x;
+            //     square.y = gamearea.y; 
+            // }
 
             // ARROW KEYS MOVEMENT
             stopmove()
@@ -164,13 +178,7 @@
             if (gamearea.keys && gamearea.keys[38]) {moveup();}
             if (gamearea.keys && gamearea.keys[40]) {movedown();}
             square.newpos();
-
-            // // MOUSE CURSOR MOVEMENT
-            // if (gamearea.x && gamearea.y) {
-            //     square.x = gamearea.x;
-            //     square.y = gamearea.y; 
-            // }
-
+            
             square.update();
         }
     }
