@@ -29,6 +29,7 @@
     
     var square; //player square
     var squaredimensions = 30;
+    var squarecolor = "rgba(255, 127, 0, 1)";
 
     var fps = 50;
 
@@ -36,7 +37,7 @@
     function startgame() {
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
-        square = new rectangle(squaredimensions, squaredimensions, "red", 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
+        square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
     }
 
     //variable to hold canvas for the game screen
@@ -75,6 +76,7 @@
     //function to redraw game screen
     function updateGameArea() {
         gamearea.clear();
+        square.x += 1;
         square.update();
     }
 
