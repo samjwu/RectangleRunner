@@ -25,20 +25,14 @@
 
 
 <body onload="startgame()">
+
     <script>
     
     var square; //player square
-    var squaredimensions = 30;
-    var squarecolor = "rgba(255, 127, 0, 1)";
+    var squaredimensions=30;
+    var squarecolor="rgba(255, 127, 0, 1)";
 
-    var fps = 50;
-
-    //function to init gamearea object
-    function startgame() {
-        //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
-        gamearea.start();
-        square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
-    }
+    var fps=50;
 
     //variable to hold canvas for the game screen
     var gamearea = {
@@ -65,12 +59,26 @@
         this.height = height;
         this.x = x;
         this.y = y;
+        this.speedx = 0;
+        this.speedy = 0;
         //function to redraw rectangle
         this.update = function(){
             canvascontext = gamearea.context;
             canvascontext.fillStyle = color;
             canvascontext.fillRect(this.x, this.y, this.width, this.height);
-        }
+        },
+        //function to move rectangle using speed
+        this.newPos = function() {
+        this.x += this.speedX;
+        this.y += this.speedY; 
+        } 
+    }
+
+    //function to init gamearea object
+    function startgame() {
+        //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
+        gamearea.start();
+        square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
     }
 
     //function to redraw game screen
@@ -80,7 +88,32 @@
         square.update();
     }
 
+    //functions to move player square
+    function moveup() {
+        square.speedy -= 1; 
+    }
+    function movedown() {
+        square.speedy += 1; 
+    }
+    function moveleft() {
+        square.speedx -= 1;
+    }
+    function moveright() {
+        square.speedx += 1;
+    }
+
+    
+
     </script>
+
+    <!-- buttons to move player square -->
+    <div style="text-align:center; width:480px;">
+        <button onclick="moveup()">UP</button><br><br>
+        <button onclick="moveleft()">LEFT</button>
+        <button onclick="moveright()">RIGHT</button><br><br>
+        <button onclick="movedown()">DOWN</button>
+    </div>
+
 </body>
 
 
