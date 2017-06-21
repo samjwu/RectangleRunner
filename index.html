@@ -31,9 +31,11 @@
     var square; //player square
     var squaredimensions = 30;
     var squarecolor = "rgba(255, 127, 0, 1)"; //pure chroma orange
-    var squarespeed = 2;
+    var squarespeed = 10;
 
     var obstacles=[];
+    var obstaclespeed = 10;
+    var obstacleinterval = obstaclespeed * 4;
 
     var fps = 50;
 
@@ -128,16 +130,24 @@
 
     //functions to move player square
     function moveup() {
-        square.speedy -= squarespeed; 
+        if (square.y > 0 && square.y < gamearea.canvas.height - squaredimensions) {
+            square.speedy -= squarespeed;
+        }
     }
     function movedown() {
-        square.speedy += squarespeed;
+        if (square.y > 0 && square.y < gamearea.canvas.height - squaredimensions) {
+            square.speedy += squarespeed;
+        }
     }
     function moveleft() {
-        square.speedx -= squarespeed;
+        if (square.x > 0 && square.x < gamearea.canvas.width -squaredimensions) {
+            square.speedx -= squarespeed;
+        }
     }
     function moveright() {
-        square.speedx += squarespeed;
+        if (square.x > 0 && square.x < gamearea.canvas.width -squaredimensions) {
+            square.speedx += squarespeed;
+        }
     }
 
     //function to stop player square
@@ -155,6 +165,8 @@
     //function to redraw game screen
     function updategamearea() {
         var x, y; //topleft coordinates of obstacles
+        var height, minheight, maxheight; //heights parameters for obstacles 
+        var gap, mingap, maxgap; //gaps parameters for obstacles
 
         //loop through all obstacles; stop if square collides with one of them
         for (i = 0; i < obstacles.length; i += 1) {
@@ -168,15 +180,21 @@
         gamearea.framenum += 1 ;
 
         //place obstacles every n frames
-        if (gamearea.framenum == 1 || everyinterval(100)) {
+        if (gamearea.framenum == 1 || everyinterval(obstacleinterval)) {
             x = gamearea.canvas.width;
-            y = gamearea.canvas.height - 200
-            obstacles.push(new rectangle(10, 200, "yellow", x, y));
+            minheight = 40;
+            maxheight = 500;
+            height = Math.floor(Math.random() * (maxheight - minheight) + minheight);
+            mingap = 60;
+            maxgap = 200;
+            gap = Math.floor(Math.random() * (maxgap - mingap) + mingap);
+            obstacles.push(new rectangle(10, height, "yellow", x, 0));
+            obstacles.push(new rectangle(10, x - height - gap, "yellow", x, height + gap));
         }
 
         //move all obstacles
         for (i = 0; i < obstacles.length; i += 1) {
-            obstacles[i].x += -1;
+            obstacles[i].x += -obstaclespeed;
             obstacles[i].update();
         }
 
