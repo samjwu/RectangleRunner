@@ -38,6 +38,7 @@
     var obstacleinterval = obstaclespeed * 4;
 
     var fps = 50;
+    var score;
 
     //variable to hold canvas for the game screen
     var gamearea = {
@@ -45,7 +46,7 @@
 
         //function to initialize canvas
         start : function() {
-            this.canvas.width = 800;
+            this.canvas.width = 900;
             this.canvas.height = 600;
             this.context = this.canvas.getContext("2d"); //getContext() is a built-in HTML object with properties and methods for drawing
             document.body.insertBefore(this.canvas, document.body.childNodes[0]); //insertBefore() method inserts a node as a child, right before a specified existing child
@@ -82,19 +83,27 @@
     }
 
     //function to create rectangles
-    function rectangle(width, height, color, x, y) {
+    function rectangle(width, height, color, x, y, type) {
         this.width = width;
         this.height = height;
         this.x = x; //topleft
         this.y = y; //topleft
         this.speedx = 0;
         this.speedy = 0;
+        this.type = type; //object or text
 
         //function to redraw rectangle
         this.update = function(){
             canvascontext = gamearea.context;
-            canvascontext.fillStyle = color;
-            canvascontext.fillRect(this.x, this.y, this.width, this.height);
+            if (this.type == "text") {
+                canvascontext.font = this.width + " " + this.height;
+                canvascontext.fillStyle = color;
+                canvascontext.fillText(this.text, this.x, this.y);
+            }
+            else {
+                canvascontext.fillStyle = color;
+                canvascontext.fillRect(this.x, this.y, this.width, this.height);
+            }
         },
 
         //function to move rectangle using speed
@@ -126,28 +135,41 @@
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
         square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
+        score = new rectangle("30px", "Consolas", "white", gamearea.canvas.width - 300, 20, "text");
     }
 
     //functions to move player square
     function moveup() {
-        if (square.y > 0 && square.y < gamearea.canvas.height - squaredimensions) {
+        if (square.y > 0) {
             square.speedy -= squarespeed;
         }
+        // else {
+        //     square.y = 20;
+        // }
     }
     function movedown() {
-        if (square.y > 0 && square.y < gamearea.canvas.height - squaredimensions) {
+        if (square.y < gamearea.canvas.height - squaredimensions) {
             square.speedy += squarespeed;
         }
+        // else {
+        //     square.y = gamearea.canvas.height - squaredimensions - 20;
+        // }
     }
     function moveleft() {
-        if (square.x > 0 && square.x < gamearea.canvas.width -squaredimensions) {
+        if (square.x > 0) {
             square.speedx -= squarespeed;
         }
+        // else {
+        //     square.x = 20;
+        // }
     }
     function moveright() {
-        if (square.x > 0 && square.x < gamearea.canvas.width -squaredimensions) {
+        if (square.x < gamearea.canvas.width -squaredimensions) {
             square.speedx += squarespeed;
         }
+        // else {
+        //     square.x = gamearea.canvas.width - squaredimensions - 20;
+        // }
     }
 
     //function to stop player square
@@ -197,6 +219,10 @@
             obstacles[i].x += -obstaclespeed;
             obstacles[i].update();
         }
+
+        //show score
+        score.text="Score: " + gamearea.framenum;
+        score.update();
 
         // // MOUSE CURSOR MOVEMENT
         // if (gamearea.x && gamearea.y) {
