@@ -35,10 +35,13 @@
 
     var obstacles=[];
     var obstaclespeed = 10;
-    var obstacleinterval = obstaclespeed * 4;
+    var obstacleinterval = obstaclespeed * 5;
 
     var fps = 50;
     var score;
+
+    var gameoversound;
+    var music;
 
     //variable to hold canvas for the game screen
     var gamearea = {
@@ -130,10 +133,27 @@
         }
     }
 
+    //function to play sound
+    function soundfile(src) {
+        this.sound = document.createElement("audio");
+        this.sound.src = src;
+        this.sound.setAttribute("preload", "auto");
+        this.sound.setAttribute("controls", "none");
+        this.sound.style.display = "none";
+        document.body.appendChild(this.sound);
+        this.play = function(){
+            this.sound.play();
+        }
+        this.stop = function(){
+            this.sound.pause();
+        }    
+    }
+
     //function to init gamearea object
     function startgame() {
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
+        gameoversound = new soundfile("Assets/GameOver.wav");
         square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
         score = new rectangle("30px", "Consolas", "white", gamearea.canvas.width - 300, 20, "text");
     }
@@ -193,6 +213,7 @@
         //loop through all obstacles; stop if square collides with one of them
         for (i = 0; i < obstacles.length; i += 1) {
             if (square.collision(obstacles[i])) {
+                gameoversound.play();
                 gamearea.stop();
                 return;
             } 
