@@ -43,6 +43,8 @@
     var gameoversound;
     var music;
 
+    var gameover = false;
+
     //variable to hold canvas for the game screen
     var gamearea = {
         canvas : document.createElement("canvas"),
@@ -55,6 +57,9 @@
             document.body.insertBefore(this.canvas, document.body.childNodes[0]); //insertBefore() method inserts a node as a child, right before a specified existing child
             this.framenum = 0;
             this.interval = setInterval(updategamearea, 1000/fps); //set fps
+
+            //get mouse click event
+            this.canvas.addEventListener("mousedown", handlemouseclick);
 
             //toggle key array when keys are pressed/released
             //key codes: https://css-tricks.com/snippets/javascript/javascript-keycodes/ and http://keycode.info/
@@ -82,6 +87,14 @@
         //function to clear the 1000/fps millisecond interval
         stop : function() {
             clearInterval(this.interval); //clearInterval() method clears a timer set with the setInterval() method.
+        }
+    }
+
+    //continue game after mouse click
+    function handlemouseclick(event) {
+        if(gameover) {
+            gameover = false;
+            location.reload();
         }
     }
 
@@ -212,12 +225,17 @@
         var height, minheight, maxheight; //heights parameters for obstacles 
         var gap, mingap, maxgap; //gaps parameters for obstacles
 
-        //loop through all obstacles; stop if square collides with one of them
+        //gameover logic
+        if (gameover) {
+            return;
+        }
+
+        //loop through all obstacles; set game over var if square collides with one of them
         for (i = 0; i < obstacles.length; i += 1) {
             if (square.collision(obstacles[i])) {
                 gameoversound.play();
                 gamearea.stop();
-                return;
+                gameover = true;
             } 
         }
 
