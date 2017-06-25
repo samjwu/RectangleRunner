@@ -44,6 +44,7 @@
     var music;
 
     var gameover = false;
+    var playagainbutton;
 
     //variable to hold canvas for the game screen
     var gamearea = {
@@ -171,6 +172,7 @@
         music.play();
         square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
         score = new rectangle("30px", "Consolas", "white", gamearea.canvas.width - 300, 20, "text");
+        playagainbutton = new rectangle("30px", "Consolas", "white", 20, 20, "text");
     }
 
     //functions to move player square
@@ -233,9 +235,14 @@
         //loop through all obstacles; set game over var if square collides with one of them
         for (i = 0; i < obstacles.length; i += 1) {
             if (square.collision(obstacles[i])) {
-                gameoversound.play();
-                gamearea.stop();
-                gameover = true;
+                playagainbutton.text="Play Again";
+                playagainbutton.update();
+                gameoversound.play(); //gameover sound
+                //show play again button
+                // playagainbutton.text = "Click to Play Again"
+                // playagainbutton.update();
+                gamearea.stop(); //stop game
+                gameover = true; //set gameover var
             } 
         }
 
@@ -262,9 +269,11 @@
         }
 
         //show score
-        score.text="Score: " + gamearea.framenum;
+        score.text = "Score: " + gamearea.framenum;
         score.update();
-
+        // playagainbutton.text = "Click to Play Again"
+        // playagainbutton.update();
+        
         // // MOUSE CURSOR MOVEMENT
         // if (gamearea.x && gamearea.y) {
         //     square.x = gamearea.x;
