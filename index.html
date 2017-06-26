@@ -167,8 +167,8 @@
     function startgame() {
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
-        gameoversound = new soundfile("Assets/GameOver.wav");
-        music = new soundfile("Assets/ChaozFantasy.mp3");
+        gameoversound = new soundfile("sfx/GameOver.wav");
+        music = new soundfile("music/ChaozFantasy.mp3");
         music.play();
         square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
         score = new rectangle("30px", "Consolas", "white", gamearea.canvas.width - 300, 20, "text");
