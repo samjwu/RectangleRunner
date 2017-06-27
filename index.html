@@ -148,13 +148,17 @@
     }
 
     //function to play sound
-    function soundfile(src) {
+    function soundfile(src, music = false) {
         this.sound = document.createElement("audio");
         this.sound.src = src;
         this.sound.setAttribute("preload", "auto");
         this.sound.setAttribute("controls", "none");
         this.sound.style.display = "none";
         document.body.appendChild(this.sound);
+        //loop if music, otherwise do not loop
+        if (music) {
+            this.sound.loop = true;
+        }
         this.play = function(){
             this.sound.play();
         }
@@ -168,7 +172,8 @@
         //start() method creates a <canvas> element and inserts it as the first child node of the <body> element
         gamearea.start();
         gameoversound = new soundfile("sfx/GameOver.wav");
-        music = new soundfile("music/ChaozFantasy.mp3");
+        music = new soundfile("music/ChaozFantasy.mp3", true);
+        music.loop = true;
         music.play();
         square = new rectangle(squaredimensions, squaredimensions, squarecolor, 10, gamearea.canvas.height/2 - squaredimensions); //squares are rectangles too!
         score = new rectangle("30px", "Consolas", "white", gamearea.canvas.width - 300, 20, "text");
